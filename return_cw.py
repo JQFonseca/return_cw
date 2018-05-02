@@ -9,7 +9,7 @@ import exchange
 
 #get names and emails using named tuples
 
-NAMES_PATTERN = re.compile(r"""^\s+
+NAMES_PATTERN = re.compile(r"""
                           (\w+)\s+
                           ([A-Za-z- ]+)\t
                           ([A-Za-z- ]+)\t
@@ -90,7 +90,7 @@ def create_messages(students, cw_files, account):
         subject = ('{} coursework feedback').format(assignement)
         body = (
             '<p>Dear {},</p><p>Please see attached your '
-            'marked {} coursework. Please see file for extra feedback.</p><p>Joao</p>'
+            'marked {} coursework. It should be fully marked now. Please see file for feedback.</p><p>Joao</p>'
             ).format(first_name, assignement)
 
         msg = exchange.compose_email(account, subject, body, email, cw_file)
