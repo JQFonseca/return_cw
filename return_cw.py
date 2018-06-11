@@ -90,7 +90,7 @@ def create_messages(students, cw_files, account):
         subject = ('{} coursework feedback').format(assignement)
         body = (
             '<p>Dear {},</p><p>Please see attached your '
-            'marked {} coursework. It should be fully marked now. Please see file for feedback.</p><p>Joao</p>'
+            'marked {}. Please see file for feedback.</p><p>Joao</p>'
             ).format(first_name, assignement)
 
         msg = exchange.compose_email(account, subject, body, email, cw_file)
