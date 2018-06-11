@@ -10,7 +10,11 @@ Clone or download the files and run `python return_cw.py'
 
 ## Requirements
 
-Needs `tk` and `exchangelib`. 
+Needs `tk` and `exchangeLib`. 
+
+Anaconda python provides tk and exchangeLib can be installed using pip:
+
+`>pip install exchangeLib`
 
 
  
