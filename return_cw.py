@@ -45,6 +45,8 @@ def get_students():
                 user_name = match_name.group(1)
                 student = user._make(match_name.group(2, 3, 4))
                 student_dict[user_name] = student
+    student_numbers = len(student_dict)
+    print('Successfully read {} names and emails.'.format(student_numbers))
     return student_dict
 
 
@@ -56,7 +58,6 @@ def get_cwfiles():
     user = namedtuple('user',
                       ['cw_file',
                        'assignement'])
-
     cw_list = in_out.open_files()
 
     for cw_file in cw_list:
@@ -72,9 +73,20 @@ def get_cwfiles():
         else:
             print("Couldn't parse filename {}."
                   " Not a coursework file?").format(file_name)
+            quit()
     return cw_dict
 
-def create_messages(students, cw_files, account):
+def get_body():
+    body_file = in_out.get_body_file()
+    if body_file:
+        with open(body_file, 'r') as f_handle:
+            body = f_handle.read()
+        return body
+    else:
+        sig='<p>Jo&atildeo</p>'
+        return sig
+        
+def create_messages(students, cw_files, account, body_part2):
     """
     Create messages to send out
     """
@@ -88,14 +100,14 @@ def create_messages(students, cw_files, account):
         last_name = students[username].last_name
 
         subject = ('{} coursework feedback').format(assignement)
-        body = (
+        body_part1 = (
             '<p>Dear {},</p><p>Please see attached your '
-            'marked {}. Please see file for feedback.</p><p>Joao</p>'
-            ).format(first_name, assignement)
-
+            'marked {}.</p><br>' 
+            ).format(first_name, assignement) 
+        body = body_part1 + body_part2
         msg = exchange.compose_email(account, subject, body, email, cw_file)
         msg_list.append(msg)
-    return msg_list
+    return body, msg_list
 
 def return_cw():
     """
@@ -104,10 +116,11 @@ def return_cw():
 
     students = get_students()
     cw_files = get_cwfiles()
+    body_part2 = get_body()
     login, passwd = in_out.get_username()
     account = exchange.get_account(login, passwd)
-    msg_list = create_messages(students, cw_files, account)
-
+    body, msg_list = create_messages(students, cw_files, account, body_part2)
+    print(body)
     send_messages = input("Send {} messages? (y/(n))".format(len(msg_list)))
 
     if send_messages == 'y':
